@@ -15,6 +15,7 @@ function App() {
 
   const handleSubmit = useCallback(e => {
     e.preventDefault();
+
     dispatch(addDomain(inputValue));
     setInputValue('');
   }, [inputValue]);
