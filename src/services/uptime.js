@@ -1,6 +1,7 @@
 import axios from "axios";
 
-import { setUptime } from "../redux/actions";
+import store from './/redux';
+import { setUptime } from ".//actions";
 
 const DOMAINS_TO_CHECK = [
   "passfoo.com",
@@ -10,6 +11,7 @@ const DOMAINS_TO_CHECK = [
 ];
 
 const checkUptime = async () => {
+  const newState = store.getState();
   for (const domain of DOMAINS_TO_CHECK) {
     /**
      * This endpoint is a dummy endpoint we have implemented for the purpose of this challenge.
@@ -20,7 +22,7 @@ const checkUptime = async () => {
      * - Any domain that starts with "fail___" always returns 'status: FAILED'
      * - All other domains return a status of OK vs FAILED randomly
      */
-    const url = `https://uptime-checker.tryprospect.repl.co/status?domain=${domain}`;
+    const url = `https://uptime-checker.tryprospect.repl.co ${domain}`;
     const response = await axios.get(url);
 
     setUptime(response.data);
@@ -28,7 +30,5 @@ const checkUptime = async () => {
 };
 
 export default () => {
-  checkUptime();
-
-  setInterval(checkUptime, 5000);
+  checkUptime().then(() => setInterval(checkUptime, 5000));
 };
